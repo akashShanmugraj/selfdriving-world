@@ -1,103 +1,46 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <title>World Editor</title>
-        <link rel="stylesheet" href="style.css"/>
-    </head>
-    <body>
-        <h1>World Editor</h1>
-        <canvas id="myCanvas"></canvas>
-        <div id="controls">
-            <button onclick="addRandomPoint()">Add Random Point</button>
-            <button onclick="removeRandomPoint()">Remove Random Point</button>
-            <button onclick="addRandomSegment()">Add Random Segment</button>
-            <button onclick="removeRandomSegment()">Remove Random Segment</button>
-            <button onclick="removeAll()">Remove All</button>
-        </div>
+   <head>
+      <title>World Editor</title>
+      <link rel="stylesheet" href="styles.css"/>
+   </head>
+   <body>
+      <h1>World Editor</h1>
+      <canvas id="myCanvas"></canvas>
+      <div id="controls">
+      </div>
 
-        <p>World Editor is a web-based tool for creating and editing worlds the game </p>
-        
-        <script src="js/math/graph.js"></script>
-        <script src="js/primitives/point.js"></script>
-        <script src="js/grapheditor.js"></script>
-        <script src="js/primitives/segment.js"></script>
-        
-        <script>
-            myCanvas.width = 800;
-            myCanvas.height = 600;
-            
-            function removeAll(){
-                graph.dispose()
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                graph.draw(ctx);
-            }
+      <script src="js/graphEditor.js"></script>
+      <script src="js/math/utils.js"></script>
+      <script src="js/math/graph.js"></script>
+      <script src="js/primitives/point.js"></script>
+      <script src="js/primitives/segment.js"></script>
+      <script>
+         myCanvas.width = 600;
+         myCanvas.height = 600;
 
-            function removeRandomPoint(){
-                if (graph.points.length == 0) {
-                    console.log("No points to remove");
-                    return ;
-                }
+         const ctx = myCanvas.getContext("2d");
 
-                const index = Math.floor(Math.random() * graph.points.length);
-                graph.removePoint(graph.points[index]);
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                graph.draw(ctx);
-            }
+         const p1 = new Point(200, 200);
+         const p2 = new Point(500, 200);
+         const p3 = new Point(400, 400);
+         const p4 = new Point(100, 300);
 
-            function removeRandomSegment(){
-                if (graph.segments.length == 0) {
-                    console.log("No segments to remove");
-                    return ;
-                }
+         const s1 = new Segment(p1, p2);
+         const s2 = new Segment(p1, p3);
+         const s3 = new Segment(p1, p4);
+         const s4 = new Segment(p2, p3);
 
-                const index = Math.floor(Math.random() * graph.segments.length);
-                graph.removeSegment(graph.segments[index]);
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                graph.draw(ctx);
-            }
+         const graph = new Graph([p1, p2, p3, p4], [s1, s2, s3, s4]);
+         const graphEditor = new GraphEditor(myCanvas, graph);
 
-            function addRandomPoint() {
-                const x = Math.random() * 800;
-                const y = Math.random() * 600;
-                const p = new Point(x, y);
-                const success = graph.tryAddPoint(p);
-                graph.draw(ctx);
-                console.log(success);
-            }
+         animate();
 
-            function addRandomSegment() {
-                const p1 = graph.points[Math.floor(Math.random() * graph.points.length)];
-                const p2 = graph.points[Math.floor(Math.random() * graph.points.length)];
-                const s = new Segment(p1, p2);
-                const success = graph.tryAddSegment(s);
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                graph.draw(ctx);
-                console.log(success);
-            }
-
-
-            const ctx = myCanvas.getContext('2d');
-
-            const p1 = new Point(100, 100);
-            const p2 = new Point(200, 200);
-            const p3 = new Point(300, 100);
-            const p4 = new Point(400, 200);
-
-            const s1 = new Segment(p1, p2);
-            const s2 = new Segment(p2, p3);
-            const s3 = new Segment(p3, p4);
-            const graph = new Graph([p1, p2, p3, p4], [s1, s2, s3]);
-            const grapheditor = new GraphEditor(myCanvas, graph);
-
-            animate();
-
-            function animate() {
-                ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
-                grapheditor.display();
-                requestAnimationFrame(animate);
-            }
-            
-            graph.draw(ctx);
-        </script>
-    </body>
-</html>
+         function animate() {
+            ctx.clearRect(0, 0, myCanvas.width, myCanvas.height);
+            graphEditor.display();
+            requestAnimationFrame(animate);
+         }
+      </script>
+   </body>
+</html>                                                                                                                          
